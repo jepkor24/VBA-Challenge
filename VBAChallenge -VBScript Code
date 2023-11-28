@@ -1,0 +1,106 @@
+Sub Stocks():
+
+    For Each ws In Worksheets
+
+
+        lastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+        
+'Insert the Ticker Columm and enter data
+    ws.Cells(1, 9).Value = "Ticker"
+      
+'Insert the yearly change column and enter the data
+    ws.Cells(1, 10).Value = "Yearly Change"
+        
+'Insert the percentage change column and enter data
+    ws.Cells(1, 11).Value = "Percentage Change"
+'Insert the Total Stock Volume column and enter the data
+    ws.Cells(1, 12).Value = "Total Stock Volume"
+    'Insert the Ticker for the % decrease/increase
+    ws.Cells(2, 15).Value = "Greatest % Increase"
+    ws.Cells(3, 15).Value = "Greatest % Decrease"
+    ws.Cells(4, 15).Value = "Greatest Total Volume"
+    ws.Cells(1, 16).Value = "Ticker"
+    ws.Cells(1, 17).Value = "Value"
+   
+    
+    
+    Dim columm As Integer
+    Dim i As Long
+    Dim total As Double
+    Dim yearlychange As Double
+    Dim Tickernumber
+    Dim openprice As Double
+    Dim closeprice As Double
+   ' Dim percentchange As Double
+    
+    
+
+    Column = 1
+    total = 0
+    Tickernumber = 2
+    yearchange = 2
+    openprice = 24.44
+    closeprice = 21.32
+    
+ 'first for loop to loop through first to lastRow
+     For i = 2 To lastRow
+     If Cells(i + 1, Column).Value <> Cells(i, Column).Value Then
+       ' total = total + Cells(i, 7).Value
+        ' ws.Cells(i, 12).Value = total
+         
+          Ticker = ws.Cells(i, Column).Value
+        ws.Cells(Tickernumber, 9).Value = Ticker
+        Tickernumber = Tickernumber + 1
+    
+        yearlychange = closeprice - openprice
+        ws.Cells(yearchange, 10).Value = yearlychange
+        openprice = ws.Cells(i, 3).Value
+        closeprice = ws.Cells(i, 6).Value
+        'yearchange = yearchange + 1
+    
+    'conditional formatting for the yearly change column
+         If yearlychange >= 0 Then
+         Cells(yearchange, 10).Interior.ColorIndex = 4
+            
+            Else:
+          Cells(yearchange, 10).Interior.ColorIndex = 3
+                     
+          End If
+        yearchange = yearchange + 1
+          
+          
+          'percentage change calculation
+         'If openprice > 0 Then
+         ' percentchange = (yearlychange / openprice)
+          'ws.Cells(i, 11).Value = percentchange
+          'End If
+    Else
+        total = total + Cells(i, 7).Value
+        ws.Cells(i, 12).Value = total
+    End If
+            
+          
+          
+          'percentage change calculation
+          percentchange = FormatPercent((yearlychange / openprice) * 100)
+          ws.Cells(i, 11).Value = percentchange
+          
+   'greatest percentage increase, decrease and volume
+  'ws.Cells(2, 17).Value = "%" & WorksheetFunction.Max(Range("K2:K" & RowCount)) * 100
+  'ws.Cells(3, 17).Value = "%" & WorksheetFunction.Min(Range("K2:K" & RowCount)) * 100
+  'ws.Cells(4, 17).Value = WorksheetFunction.Max(Range("L2:L" & RowCount)) * 100
+   '
+   'percentincrease = WorksheetFunction.Match(WorksheetFunction.Max(Range("K2:K" & RowCount)), Range("K2:K" & RowCount), 0)
+  ' percentdecrease = WorksheetFunction.Match(WorksheetFunction.Min(Range("K2:K" & RowCount)), Range("K2:K" & RowCount), 0)
+   'percentdecrease = WorksheetFunction.Match(WorksheetFunction.Max(Range("L2:L" & RowCount)), Range("L2:L" & RowCount), 0)
+  '
+    
+
+
+       Next i
+
+Next ws
+
+End Sub
+
